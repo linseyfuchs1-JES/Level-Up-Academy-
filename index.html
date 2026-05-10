@@ -8,18 +8,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
 
 :root {
-  --bg: #0d0d1a;
-  --surface: #151528;
-  --surface2: #1e1e38;
-  --gold: #FFD700;
-  --gold2: #FFA500;
-  --neon-blue: #00D4FF;
-  --neon-green: #00FF88;
-  --neon-purple: #C840FF;
-  --neon-red: #FF4466;
-  --text: #F0EEFF;
-  --text-dim: #7A7A9A;
-  --border: rgba(255,215,0,0.2);
+  --bg: #F5F3FF;
+  --bg2: #EDE9FE;
+  --surface: #FFFFFF;
+  --surface2: #F0EEFF;
+  --surface3: #E8E4FF;
+  --gold: #D97706;
+  --gold2: #F59E0B;
+  --gold-light: #FEF3C7;
+  --neon-blue: #2563EB;
+  --neon-blue-light: #DBEAFE;
+  --neon-green: #059669;
+  --neon-green-light: #D1FAE5;
+  --neon-purple: #7C3AED;
+  --neon-purple-light: #EDE9FE;
+  --neon-red: #DC2626;
+  --neon-red-light: #FEE2E2;
+  --text: #1E1B4B;
+  --text-mid: #4C4A6B;
+  --text-dim: #7C7A9A;
+  --border: rgba(124,58,237,0.15);
+  --border-strong: rgba(124,58,237,0.25);
+  --shadow: 0 2px 12px rgba(124,58,237,0.08);
+  --shadow-md: 0 4px 24px rgba(124,58,237,0.12);
+  --shadow-lg: 0 8px 40px rgba(124,58,237,0.16);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,41 +45,39 @@ body {
   position: relative;
 }
 
-/* Animated pixel grid background */
+/* Soft dot pattern background */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-image: radial-gradient(circle, rgba(124,58,237,0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Floating orbs */
+/* Soft blobs */
 .orb {
   position: fixed;
   border-radius: 50%;
   filter: blur(80px);
   pointer-events: none;
   z-index: 0;
-  animation: floatOrb 8s ease-in-out infinite;
+  animation: floatOrb 10s ease-in-out infinite;
 }
-.orb1 { width: 300px; height: 300px; background: rgba(0,212,255,0.08); top: -100px; left: -100px; animation-delay: 0s; }
-.orb2 { width: 250px; height: 250px; background: rgba(200,64,255,0.08); bottom: -80px; right: -80px; animation-delay: 3s; }
-.orb3 { width: 200px; height: 200px; background: rgba(0,255,136,0.06); top: 40%; left: 60%; animation-delay: 5s; }
+.orb1 { width: 400px; height: 400px; background: rgba(124,58,237,0.07); top: -150px; left: -100px; animation-delay: 0s; }
+.orb2 { width: 350px; height: 350px; background: rgba(245,158,11,0.07); bottom: -100px; right: -80px; animation-delay: 4s; }
+.orb3 { width: 300px; height: 300px; background: rgba(37,99,235,0.06); top: 35%; left: 55%; animation-delay: 7s; }
 
 @keyframes floatOrb {
   0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(20px, -20px); }
+  50% { transform: translate(24px, -24px); }
 }
 
 .container {
-  max-width: 680px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 20px 16px 80px;
+  padding: 32px 20px 100px;
   position: relative;
   z-index: 1;
 }
@@ -79,35 +89,35 @@ body::before {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  gap: 32px;
-  padding: 40px 20px;
+  gap: 48px;
+  padding: 60px 24px;
+  position: relative;
+  z-index: 1;
 }
 
-.title-logo {
-  text-align: center;
-}
+.title-logo { text-align: center; }
 .title-main {
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(32px, 8vw, 56px);
-  color: var(--gold);
+  font-size: clamp(36px, 9vw, 64px);
+  color: var(--neon-purple);
   text-shadow:
-    0 0 30px rgba(255,215,0,0.6),
-    0 0 60px rgba(255,215,0,0.3),
-    4px 4px 0 rgba(255,100,0,0.5);
+    0 2px 0 rgba(124,58,237,0.2),
+    0 8px 30px rgba(124,58,237,0.2);
   letter-spacing: 2px;
-  line-height: 1;
+  line-height: 1.1;
 }
 .title-sub {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-dim);
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  margin-top: 8px;
+  margin-top: 12px;
+  font-weight: 700;
 }
 
 .press-start {
   font-family: 'Fredoka One', cursive;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--neon-blue);
   letter-spacing: 2px;
   animation: blink 1.2s step-end infinite;
@@ -116,22 +126,23 @@ body::before {
 
 .player-cards {
   display: flex;
-  gap: 20px;
+  gap: 28px;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .player-card {
   background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: 20px;
-  padding: 32px 28px;
-  width: 220px;
+  border: 2px solid var(--border-strong);
+  border-radius: 28px;
+  padding: 44px 36px;
+  width: 240px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.25s;
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow);
 }
 .player-card::before {
   content: '';
@@ -139,31 +150,35 @@ body::before {
   inset: 0;
   opacity: 0;
   transition: opacity 0.25s;
+  border-radius: 28px;
 }
-.player-card.p1::before { background: radial-gradient(ellipse at center, rgba(0,212,255,0.12), transparent 70%); }
-.player-card.p2::before { background: radial-gradient(ellipse at center, rgba(200,64,255,0.12), transparent 70%); }
-.player-card:hover { transform: translateY(-6px); }
-.player-card.p1:hover { border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0,212,255,0.3); }
-.player-card.p2:hover { border-color: var(--neon-purple); box-shadow: 0 0 30px rgba(200,64,255,0.3); }
+.player-card.p1::before { background: radial-gradient(ellipse at 50% 0%, rgba(37,99,235,0.08), transparent 70%); }
+.player-card.p2::before { background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.08), transparent 70%); }
+.player-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+.player-card.p1:hover { border-color: var(--neon-blue); }
+.player-card.p2:hover { border-color: var(--neon-purple); }
 .player-card:hover::before { opacity: 1; }
 
-.player-avatar { font-size: 56px; margin-bottom: 12px; display: block; }
+.player-avatar { font-size: 64px; margin-bottom: 16px; display: block; }
 .player-label {
   font-family: 'Fredoka One', cursive;
-  font-size: 22px;
-  margin-bottom: 4px;
+  font-size: 24px;
+  margin-bottom: 6px;
 }
 .p1 .player-label { color: var(--neon-blue); }
 .p2 .player-label { color: var(--neon-purple); }
-.player-info { font-size: 13px; color: var(--text-dim); }
+.player-info { font-size: 13px; color: var(--text-dim); font-weight: 600; }
 .player-xp {
-  margin-top: 14px;
-  font-size: 12px;
+  margin-top: 18px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-block;
 }
-.p1 .player-xp { color: var(--neon-blue); }
-.p2 .player-xp { color: var(--neon-purple); }
+.p1 .player-xp { background: var(--neon-blue-light); color: var(--neon-blue); }
+.p2 .player-xp { background: var(--neon-purple-light); color: var(--neon-purple); }
 
 /* ── MAIN APP ── */
 #mainApp { display: none; }
@@ -172,89 +187,93 @@ body::before {
 .app-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 0 24px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 24px;
+  gap: 16px;
+  padding: 20px 0 32px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
 }
 .back-btn {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 2px solid var(--border-strong);
+  border-radius: 14px;
   color: var(--text-dim);
   font-size: 18px;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
+  box-shadow: var(--shadow);
+  flex-shrink: 0;
 }
-.back-btn:hover { border-color: var(--gold); color: var(--gold); }
+.back-btn:hover { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: var(--shadow-md); }
 .header-info { flex: 1; }
 .header-player {
   font-family: 'Fredoka One', cursive;
-  font-size: 18px;
+  font-size: 20px;
 }
 .header-player.p1c { color: var(--neon-blue); }
 .header-player.p2c { color: var(--neon-purple); }
-.header-sub { font-size: 12px; color: var(--text-dim); }
+.header-sub { font-size: 12px; color: var(--text-dim); margin-top: 3px; font-weight: 700; }
 .header-xp {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 8px 14px;
+  background: var(--gold-light);
+  border: 2px solid rgba(217,119,6,0.25);
+  border-radius: 16px;
+  padding: 10px 18px;
   text-align: center;
+  box-shadow: var(--shadow);
 }
 .xp-num {
   font-family: 'Fredoka One', cursive;
-  font-size: 20px;
+  font-size: 24px;
   color: var(--gold);
   line-height: 1;
 }
-.xp-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+.xp-label { font-size: 10px; color: var(--gold2); letter-spacing: 1px; font-weight: 800; margin-top: 2px; }
 
 /* XP bar */
 .xp-bar-wrap {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 18px;
-  margin-bottom: 20px;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow);
 }
-.xp-bar-header { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-weight: 700; letter-spacing: 1px; }
+.xp-bar-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-mid); margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
 .xp-bar-track {
-  height: 10px;
-  background: var(--surface2);
-  border-radius: 10px;
+  height: 12px;
+  background: var(--surface3);
+  border-radius: 12px;
   overflow: hidden;
 }
 .xp-bar-fill {
   height: 100%;
-  border-radius: 10px;
+  border-radius: 12px;
   background: linear-gradient(90deg, var(--gold2), var(--gold));
   transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 10px rgba(255,215,0,0.5);
+  box-shadow: 0 0 12px rgba(245,158,11,0.4);
 }
 
 /* Week selector */
 .week-scroll {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   overflow-x: auto;
-  padding-bottom: 6px;
-  margin-bottom: 20px;
+  padding-bottom: 8px;
+  margin-bottom: 28px;
   scrollbar-width: none;
 }
 .week-scroll::-webkit-scrollbar { display: none; }
 .week-pill {
   flex-shrink: 0;
   background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: 30px;
-  padding: 7px 16px;
+  border: 2px solid var(--border-strong);
+  border-radius: 40px;
+  padding: 9px 20px;
   font-size: 12px;
   font-weight: 800;
   color: var(--text-dim);
@@ -262,171 +281,196 @@ body::before {
   transition: all 0.2s;
   white-space: nowrap;
   font-family: inherit;
+  box-shadow: var(--shadow);
 }
-.week-pill:hover { border-color: var(--gold); color: var(--gold); }
-.week-pill.active { background: var(--gold); border-color: var(--gold); color: #0d0d1a; }
-.week-pill.locked { opacity: 0.4; cursor: not-allowed; }
+.week-pill:hover { border-color: var(--neon-purple); color: var(--neon-purple); }
+.week-pill.active { background: var(--neon-purple); border-color: var(--neon-purple); color: #fff; box-shadow: 0 4px 16px rgba(124,58,237,0.3); }
 
 /* Day cards */
-.days-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.days-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
 
 .day-tile {
   background: var(--surface);
   border: 2px solid var(--border);
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow);
 }
-.day-tile.completed { border-color: rgba(0,255,136,0.4); }
-.day-tile.active-day { border-color: rgba(255,215,0,0.5); }
+.day-tile:hover { box-shadow: var(--shadow-md); }
+.day-tile.completed { border-color: rgba(5,150,105,0.35); background: linear-gradient(135deg, #fff, #f0fdf8); }
+.day-tile.active-day { border-color: rgba(217,119,6,0.4); }
 
 .day-tile-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
+  gap: 16px;
+  padding: 20px 24px;
   cursor: pointer;
 }
 .day-icon {
-  width: 40px; height: 40px;
-  border-radius: 12px;
+  width: 48px; height: 48px;
+  border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
+  font-size: 22px;
   flex-shrink: 0;
 }
-.icon-math { background: rgba(0,212,255,0.15); }
-.icon-grammar { background: rgba(200,64,255,0.15); }
-.icon-ai { background: rgba(0,255,136,0.15); }
-.icon-free { background: rgba(255,68,102,0.15); }
+.icon-math { background: var(--neon-blue-light); }
+.icon-grammar { background: var(--neon-purple-light); }
+.icon-ai { background: var(--neon-green-light); }
+.icon-free { background: var(--neon-red-light); }
 
 .day-meta { flex: 1; }
-.day-name { font-weight: 800; font-size: 15px; }
-.day-type { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.day-name { font-weight: 900; font-size: 16px; color: var(--text); }
+.day-type { font-size: 12px; color: var(--text-dim); margin-top: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
-.day-status { display: flex; align-items: center; gap: 8px; }
+.day-status { display: flex; align-items: center; gap: 10px; }
 .check-circle {
-  width: 28px; height: 28px;
+  width: 34px; height: 34px;
   border-radius: 50%;
-  border: 2px solid var(--border);
+  border: 2px solid var(--border-strong);
   display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
+  font-size: 15px;
   transition: all 0.3s;
   background: transparent;
   cursor: pointer;
   font-family: inherit;
+  flex-shrink: 0;
 }
-.check-circle.done { background: var(--neon-green); border-color: var(--neon-green); color: #0d0d1a; }
+.check-circle.done { background: var(--neon-green); border-color: var(--neon-green); color: #fff; }
 .day-xp-badge {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 3px 8px;
-  font-size: 10px;
+  background: var(--gold-light);
+  border: 1px solid rgba(217,119,6,0.25);
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--gold);
+  white-space: nowrap;
 }
 
 .day-body {
   display: none;
-  border-top: 1px solid var(--border);
-  padding: 0 18px 16px;
+  border-top: 2px solid var(--border);
+  padding: 24px 24px 24px;
 }
 .day-tile.open .day-body { display: block; }
-.day-tile.open .day-tile-header { border-bottom: none; }
 
 /* Segments */
-.seg-block { margin-top: 14px; }
+.seg-block { margin-bottom: 24px; }
+.seg-block:last-of-type { margin-bottom: 0; }
 .seg-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 .seg-badge {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 1px;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 5px 12px;
+  border-radius: 8px;
   text-transform: uppercase;
 }
-.badge-warmup { background: rgba(255,165,0,0.2); color: var(--gold2); }
-.badge-mission { background: rgba(0,212,255,0.2); color: var(--neon-blue); }
-.badge-boss { background: rgba(255,68,102,0.2); color: var(--neon-red); }
-.seg-timer { font-size: 10px; color: var(--text-dim); font-weight: 700; }
-.seg-content { font-size: 13px; line-height: 1.65; color: var(--text); }
-.seg-content strong { color: var(--gold); }
+.badge-warmup { background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+.badge-mission { background: var(--neon-blue-light); color: var(--neon-blue); border: 1px solid rgba(37,99,235,0.2); }
+.badge-boss { background: var(--neon-red-light); color: var(--neon-red); border: 1px solid rgba(220,38,38,0.2); }
+.seg-timer { font-size: 11px; color: var(--text-dim); font-weight: 700; }
+.seg-content { font-size: 14px; line-height: 1.75; color: var(--text-mid); }
+.seg-content strong { color: var(--text); font-weight: 900; }
 
-.player-split { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-.split-block { flex: 1; min-width: 160px; border-radius: 10px; padding: 10px 12px; }
-.split-p1 { background: rgba(0,212,255,0.07); border: 1px solid rgba(0,212,255,0.2); }
-.split-p2 { background: rgba(200,64,255,0.07); border: 1px solid rgba(200,64,255,0.2); }
-.split-label { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.player-split { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.split-block { flex: 1; min-width: 200px; border-radius: 14px; padding: 16px; }
+.split-p1 { background: var(--neon-blue-light); border: 1px solid rgba(37,99,235,0.2); }
+.split-p2 { background: var(--neon-purple-light); border: 1px solid rgba(124,58,237,0.2); }
+.split-label { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
 .split-p1 .split-label { color: var(--neon-blue); }
 .split-p2 .split-label { color: var(--neon-purple); }
-.split-content { font-size: 12px; line-height: 1.5; }
+.split-content { font-size: 13px; line-height: 1.65; color: var(--text-mid); }
 
-.tools-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+/* Khan Academy links */
+.tools-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; margin-bottom: 4px; }
 .tool-chip {
   background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 11px;
   color: var(--text-dim);
+  font-weight: 700;
 }
-.tool-chip::before { content: '🛠 '; }
+.ka-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1DB954;
+  background: linear-gradient(135deg, #14A085, #1D7A4F);
+  border: none;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.ka-link:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20,160,133,0.35); }
+.ka-link::before { content: '📚'; }
 
 /* Complete button */
 .complete-btn {
   width: 100%;
-  margin-top: 16px;
-  padding: 13px;
-  border-radius: 12px;
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 14px;
   border: none;
   font-family: 'Fredoka One', cursive;
-  font-size: 16px;
+  font-size: 17px;
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 .complete-btn.incomplete {
-  background: linear-gradient(135deg, var(--gold2), var(--gold));
-  color: #0d0d1a;
-  box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+  background: linear-gradient(135deg, var(--neon-purple), #A855F7);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.35);
 }
-.complete-btn.incomplete:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,215,0,0.4); }
+.complete-btn.incomplete:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(124,58,237,0.4); }
 .complete-btn.completed-state {
-  background: rgba(0,255,136,0.15);
+  background: var(--neon-green-light);
   border: 2px solid var(--neon-green);
   color: var(--neon-green);
   cursor: default;
+  font-weight: 800;
 }
 
 /* Free day tile */
-.free-day-body { padding: 14px 18px; color: var(--text-dim); font-size: 13px; line-height: 1.65; }
-.free-day-title { font-family: 'Fredoka One', cursive; font-size: 14px; color: var(--neon-red); margin-bottom: 6px; }
+.free-day-body { padding: 20px 0 4px; color: var(--text-mid); font-size: 14px; line-height: 1.75; }
+.free-day-title { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--neon-red); margin-bottom: 10px; }
 
 /* Stats row */
 .stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 14px;
+  margin-bottom: 28px;
 }
 .stat-box {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 12px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 16px;
   text-align: center;
+  box-shadow: var(--shadow);
 }
-.stat-num { font-family: 'Fredoka One', cursive; font-size: 26px; color: var(--gold); line-height: 1; }
-.stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; font-weight: 700; }
+.stat-num { font-family: 'Fredoka One', cursive; font-size: 30px; color: var(--neon-purple); line-height: 1; }
+.stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; margin-top: 6px; text-transform: uppercase; font-weight: 800; }
 
 /* XP popup */
 .xp-popup {
@@ -435,37 +479,38 @@ body::before {
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
   background: var(--surface);
-  border: 3px solid var(--gold);
-  border-radius: 24px;
-  padding: 32px 48px;
+  border: 3px solid var(--neon-purple);
+  border-radius: 28px;
+  padding: 44px 56px;
   text-align: center;
   z-index: 100;
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 60px rgba(255,215,0,0.4);
+  box-shadow: 0 0 60px rgba(124,58,237,0.25);
 }
 .xp-popup.show { transform: translate(-50%, -50%) scale(1); }
-.popup-icon { font-size: 56px; margin-bottom: 8px; }
-.popup-title { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--gold); }
-.popup-xp { font-family: 'Fredoka One', cursive; font-size: 48px; color: var(--neon-green); line-height: 1; }
-.popup-sub { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+.popup-icon { font-size: 64px; margin-bottom: 12px; }
+.popup-title { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--neon-purple); }
+.popup-xp { font-family: 'Fredoka One', cursive; font-size: 56px; color: var(--neon-green); line-height: 1; margin: 8px 0; }
+.popup-sub { font-size: 14px; color: var(--text-dim); font-weight: 700; }
 .popup-close {
-  margin-top: 20px;
-  background: var(--gold);
+  margin-top: 24px;
+  background: linear-gradient(135deg, var(--neon-purple), #A855F7);
   border: none;
-  border-radius: 12px;
-  padding: 10px 32px;
+  border-radius: 14px;
+  padding: 13px 36px;
   font-family: 'Fredoka One', cursive;
-  font-size: 16px;
-  color: #0d0d1a;
+  font-size: 17px;
+  color: #fff;
   cursor: pointer;
   transition: transform 0.15s;
-  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.3);
 }
 .popup-close:hover { transform: scale(1.05); }
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(30,27,75,0.4);
+  backdrop-filter: blur(4px);
   z-index: 99;
   display: none;
 }
@@ -476,13 +521,44 @@ body::before {
   position: fixed;
   pointer-events: none;
   z-index: 101;
-  font-size: 24px;
+  font-size: 26px;
   animation: burstAnim 1s ease-out forwards;
 }
 @keyframes burstAnim {
   0% { opacity: 1; transform: translate(0, 0) scale(1); }
   100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.3); }
 }
+
+/* Divider between segments */
+.seg-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0 4px; }
+
+/* Section label */
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Week header */
+.week-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 18px 22px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+.week-icon { font-size: 28px; }
+.week-title { font-family: 'Fredoka One', cursive; font-size: 17px; color: var(--neon-purple); }
+.week-progress { font-size: 12px; color: var(--text-dim); font-weight: 700; margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -555,6 +631,7 @@ body::before {
     </div>
 
     <div class="week-scroll" id="weekScroll"></div>
+    <div id="weekHeader"></div>
     <div class="days-list" id="daysList"></div>
   </div>
 </div>
@@ -570,6 +647,30 @@ body::before {
 </div>
 
 <script>
+// ─── KHAN ACADEMY LINKS ─────────────────────────────────────────────
+const KA_LINKS = {
+  "4th grade multiply 1-digit by 2-digit": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-multiplication-and-division-2/imp-multiply-by-1-digit-numbers/e/multiplication_3",
+  "basic ratios": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-rates/v/introduction-to-ratios-new-hd",
+  "fractions on a number line": "https://www.khanacademy.org/math/cc-third-grade-math/imp-fractions/imp-fractions-on-the-number-line/v/fractions-on-a-number-line",
+  "intro to rates": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-rates/v/introduction-to-rates",
+  "2-digit by 2-digit multiplication": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-multiplication-and-division-2/imp-multiply-2-digit-numbers/v/multiplying-2-digit-numbers",
+  "equivalent ratios": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-equivalent-ratios/v/equivalent-ratios",
+  "comparing fractions": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-comparing-fractions-visually/v/comparing-fractions-visually",
+  "intro to percents": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-percent/v/introduction-to-percents",
+  "adding fractions like denominators": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-decomposing-fractions/v/adding-fractions-with-like-denominators",
+  "pemdas order of operations": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-factors-and-multiples/order-of-operations/v/more-complicated-order-of-operations-example",
+  "common denominators unlike": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-common-denominators/v/finding-common-denominators",
+  "negative numbers number line": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-factors-and-multiples/cc-6th-negatives/v/negative-numbers-introduction",
+  "multiplying fractions whole numbers": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-multiplying-fractions-and-whole-numbers/v/multiplying-fractions-and-whole-numbers",
+  "intro to variables": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-intro-variables/v/what-is-a-variable",
+  "area and perimeter word problems": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-area-and-perimeter/cc-4th-area-word-problems/e/area-word-problems",
+  "one-step equations": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-equations/v/simple-equations",
+  "multi-step word problems 4th": "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-multiply-and-divide/cc-4th-word-problems-mult/e/multiplication-word-problems-with-multi-digit-numbers",
+  "two-step equations": "https://www.khanacademy.org/math/cc-seventh-grade-math/cc-7th-variables-expressions/cc-7th-two-step-equations/v/two-step-equations-1",
+  "bar graphs 4th grade": "https://www.khanacademy.org/math/cc-third-grade-math/imp-measurement-and-data-2/cc-3rd-bar-graphs/v/reading-bar-graphs",
+  "percents of numbers": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-percent-of/v/finding-a-percentage",
+};
+
 // ─── DATA ───────────────────────────────────────────────────────────
 const LEVELS = [
   { name: "Novice", xp: 0 }, { name: "Apprentice", xp: 200 },
@@ -588,7 +689,9 @@ const WEEKS = [
         warmup:"Times table race: set a 3-minute timer, write out the 6s, 7s, and 8s tables from memory.",
         mission:{ split:true,
           p1:"Multiplication fluency — Khan Academy (4th grade → Multiply 1-digit by 2-digit numbers). Complete 1 exercise set.",
-          p2:"Intro to ratios — Khan Academy 'Basic ratios' video + first practice set. Think: Minecraft recipe makes 4 torches with 2 coal — what's the ratio?" },
+          p1_ka: [{ label: "4th Grade Multiplication", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-multiplication-and-division-2/imp-multiply-by-1-digit-numbers/e/multiplication_3" }],
+          p2:"Intro to ratios — Khan Academy 'Basic ratios' video + first practice set. Think: Minecraft recipe makes 4 torches with 2 coal — what's the ratio?",
+          p2_ka: [{ label: "Basic Ratios", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-rates/v/introduction-to-ratios-new-hd" }] },
         boss:"<strong>Minecraft Math:</strong> Farm is 9×7 blocks. Total blocks? P1: Split into 3 equal sections — how many each? P2: 3:1 dirt-to-stone border, 20-block perimeter — how many of each?",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Tuesday", type:"grammar", emoji:"✍️", xp:45,
@@ -600,7 +703,9 @@ const WEEKS = [
         warmup:"Mental math sprint (out loud, no writing): 48÷6, 7×9, 63÷7, 8×12, 56÷8.",
         mission:{ split:true,
           p1:"Intro to fractions — Khan Academy 'What is a fraction?' + 'Fractions on a number line.' Pizza: 8 slices, you eat 3 — write both fractions.",
-          p2:"Unit rates — Khan Academy 'Intro to rates.' Link runs 12 rooms in 4 minutes — rate per minute? 3 Roblox servers, 20 players each — total players?" },
+          p1_ka: [{ label: "Fractions on a Number Line", url: "https://www.khanacademy.org/math/cc-third-grade-math/imp-fractions/imp-fractions-on-the-number-line/v/fractions-on-a-number-line" }],
+          p2:"Unit rates — Khan Academy 'Intro to rates.' Link runs 12 rooms in 4 minutes — rate per minute? 3 Roblox servers, 20 players each — total players?",
+          p2_ka: [{ label: "Intro to Rates", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-rates/v/introduction-to-rates" }] },
         boss:"<strong>Zelda Inventory:</strong> P1 — Link has 12 arrows, used ¾. How many left? Draw it. P2 — 3:2 gem-to-rupee trade ratio, 18 gems. Rupees? What if only ⅔ of gems are traded?",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Thursday", type:"ai", emoji:"🤖", xp:55,
@@ -619,7 +724,9 @@ const WEEKS = [
         warmup:"Write out the 9s and 11s times tables. Pattern check: do all 9s answers have digits that add to 9?",
         mission:{ split:true,
           p1:"Multi-digit multiplication — Khan Academy '2-digit by 2-digit.' Try 23×14: box method first, then standard algorithm.",
-          p2:"Equivalent ratios — Khan Academy 'Equivalent ratios.' Roblox game earns 5 coins/min — fill a table for 1–6 minutes. What's the pattern?" },
+          p1_ka: [{ label: "2-Digit × 2-Digit Multiplication", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-multiplication-and-division-2/imp-multiply-2-digit-numbers/v/multiplying-2-digit-numbers" }],
+          p2:"Equivalent ratios — Khan Academy 'Equivalent ratios.' Roblox game earns 5 coins/min — fill a table for 1–6 minutes. What's the pattern?",
+          p2_ka: [{ label: "Equivalent Ratios", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-equivalent-ratios/v/equivalent-ratios" }] },
         boss:"<strong>Roblox Server Math:</strong> P1 — 23 items, 14 copies each — total? P2 — 5 players, each earns 12 coins at 3:2 (coins:gems) ratio — total gems across all players?",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Tuesday", type:"grammar", emoji:"✍️", xp:45,
@@ -631,7 +738,9 @@ const WEEKS = [
         warmup:"Estimate: is 47×8 closer to 320, 380, or 420? Explain before calculating. How close were you?",
         mission:{ split:true,
           p1:"Comparing fractions — Khan Academy 'Comparing fractions.' Which is bigger: 3/4 or 2/3? Draw both on a number line to prove it.",
-          p2:"Intro to percents — Khan Academy 'Intro to percents.' 3 of 5 players win — what percent? Convert: 1/4, 3/10, 7/20 to percentages." },
+          p1_ka: [{ label: "Comparing Fractions", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-comparing-fractions-visually/v/comparing-fractions-visually" }],
+          p2:"Intro to percents — Khan Academy 'Intro to percents.' 3 of 5 players win — what percent? Convert: 1/4, 3/10, 7/20 to percentages.",
+          p2_ka: [{ label: "Intro to Percents", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-percent/v/introduction-to-percents" }] },
         boss:"<strong>Minecraft Loot Drop:</strong> P1 — 6 of 8 chest slots filled. Fraction? Bigger: 6/8 of this chest or 3/4 of another? P2 — 60% of 25 dungeon chests have diamonds. How many? Two ways.",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Thursday", type:"ai", emoji:"🤖", xp:55,
@@ -650,7 +759,9 @@ const WEEKS = [
         warmup:"Order of operations: 3 + 4 × 2 = ? Then 10 − 2 × 3 + 1 = ? (Don't just go left to right!) PEMDAS!",
         mission:{ split:true,
           p1:"Adding/subtracting fractions with like denominators — Khan Academy. Add numerators only, keep denominator. Practice: 2/8+3/8, 7/10−4/10. Simplify!",
-          p2:"Order of operations with all four operations + parentheses — Khan Academy 'PEMDAS.' Work through 5 problems step by step." },
+          p1_ka: [{ label: "Adding Fractions (Like Denominators)", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-decomposing-fractions/v/adding-fractions-with-like-denominators" }],
+          p2:"Order of operations with all four operations + parentheses — Khan Academy 'PEMDAS.' Work through 5 problems step by step.",
+          p2_ka: [{ label: "Order of Operations (PEMDAS)", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-factors-and-multiples/order-of-operations/v/more-complicated-order-of-operations-example" }] },
         boss:"<strong>Potion Crafting:</strong> P1 — Have 5/12, collect 4/12, use 3/12. How much left? Show each step. P2 — Evaluate (3+7)×2−4÷2. Write your own crafting formula using all 4 ops + parentheses. Swap with your brother!",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Tuesday", type:"grammar", emoji:"✍️", xp:50,
@@ -664,7 +775,9 @@ const WEEKS = [
         warmup:"Negative numbers intro: 5 degrees, drops 8 — new temp? Owe 3 coins, earn 7 — total? Where do negatives show up in real life?",
         mission:{ split:true,
           p1:"Unlike denominators (preview) — Khan Academy 'Common denominators.' Convert 1/2 to 2/4 to add 1/2 + 1/4. Why do the bottoms have to match?",
-          p2:"Negative numbers on a number line + adding negatives — Khan Academy. Think: Zelda health bar below zero. 6 practice problems." },
+          p1_ka: [{ label: "Finding Common Denominators", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-common-denominators/v/finding-common-denominators" }],
+          p2:"Negative numbers on a number line + adding negatives — Khan Academy. Think: Zelda health bar below zero. 6 practice problems.",
+          p2_ka: [{ label: "Negative Numbers Introduction", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-factors-and-multiples/cc-6th-negatives/v/negative-numbers-introduction" }] },
         boss:"<strong>Underground Mining:</strong> P1 — Dig down 3/4, then 1/4 more, climb up 2/4. Where are you? P2 — Start at 0. Dig −5. Go up 3 (−2). Fall down 4. What level? Write the equation.",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Thursday", type:"ai", emoji:"🤖", xp:60,
@@ -683,7 +796,9 @@ const WEEKS = [
         warmup:"About how many minutes old are you? (age × 365 × 24 × 60 — estimate first, then calculator). How close?",
         mission:{ split:true,
           p1:"Multiplying fractions by whole numbers — Khan Academy. 3 × 2/5, 4 × 3/8. Real use: each player gets 2/3 of a screen — 4 players total?",
-          p2:"Variables + expressions — Khan Academy 'Intro to variables.' 'A number plus 5' = x + 5. Evaluate 2x + 4 when x = 3. Practice 6 expressions." },
+          p1_ka: [{ label: "Multiplying Fractions by Whole Numbers", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-multiplying-fractions-and-whole-numbers/v/multiplying-fractions-and-whole-numbers" }],
+          p2:"Variables + expressions — Khan Academy 'Intro to variables.' 'A number plus 5' = x + 5. Evaluate 2x + 4 when x = 3. Practice 6 expressions.",
+          p2_ka: [{ label: "Intro to Variables", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-intro-variables/v/what-is-a-variable" }] },
         boss:"<strong>Roblox Shop:</strong> P1 — Items cost 2/5 of a coin. Buy 6 — total? P2 — Sword costs (x+3) coins, x = your level. Write expressions: shield = 2×level−2, potion = level÷2+5. Evaluate all at level 10.",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Tuesday", type:"grammar", emoji:"✍️", xp:55,
@@ -697,7 +812,9 @@ const WEEKS = [
         warmup:"Negative sprint (out loud): −3+7, 5−9, −4−3, −6+6, 2−10. Number line on paper if needed.",
         mission:{ split:true,
           p1:"Area and perimeter word problems — Khan Academy. Formulas: A = l×w, P = 2(l+w). Draw a diagram for each of 4 problems.",
-          p2:"One-step equations — Khan Academy. Inverse operations: x+5=12 → subtract 5 → x=7. Write every step. 8 problems." },
+          p1_ka: [{ label: "Area & Perimeter Word Problems", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-area-and-perimeter/cc-4th-area-word-problems/e/area-word-problems" }],
+          p2:"One-step equations — Khan Academy. Inverse operations: x+5=12 → subtract 5 → x=7. Write every step. 8 problems.",
+          p2_ka: [{ label: "One-Step Equations", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-equations/v/simple-equations" }] },
         boss:"<strong>Dungeon Architect:</strong> P1 — Design 4 rectangular rooms (make up dimensions). Area and perimeter each. Most floor space? P2 — Room length = x+3 where x = room number. Room needs area 30, width 5. Solve for length.",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Thursday", type:"ai", emoji:"🤖", xp:60,
@@ -716,7 +833,9 @@ const WEEKS = [
         warmup:"Lightning round (no calculator): 7×8, 3/4+1/4, perimeter of 5×9, −3+10, (2+3)×4. GO!",
         mission:{ split:true,
           p1:"Multi-step word problems — Khan Academy '4th grade word problems.' Draw a diagram for every problem before calculating. 3–4 problems.",
-          p2:"Two-step equations — Khan Academy. 2x+3=11 → subtract 3 → 2x=8 → divide 2 → x=4. Write every step. 6 problems." },
+          p1_ka: [{ label: "Multi-Step Word Problems (4th Grade)", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-multiply-and-divide/cc-4th-word-problems-mult/e/multiplication-word-problems-with-multi-digit-numbers" }],
+          p2:"Two-step equations — Khan Academy. 2x+3=11 → subtract 3 → 2x=8 → divide 2 → x=4. Write every step. 6 problems.",
+          p2_ka: [{ label: "Two-Step Equations", url: "https://www.khanacademy.org/math/cc-seventh-grade-math/cc-7th-variables-expressions/cc-7th-two-step-equations/v/two-step-equations-1" }] },
         boss:"<strong>Grand Tournament:</strong> P1 — 4 players, 24 coins each. Round 1: each loses 1/3. Winner gets half of everyone's remaining. Total for winner? P2 — Prize pool = (3x−5) where x = matches. Pool was 22. How many matches? Add 2 more — new pool?",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Tuesday", type:"grammar", emoji:"✍️", xp:55,
@@ -728,7 +847,9 @@ const WEEKS = [
         warmup:"Mental percent: 50% of 80? 25% of 40? 10% of 130? How do you find 15% without a calculator? (10% + half of 10%)",
         mission:{ split:true,
           p1:"Reading + creating bar graphs — Khan Academy '4th grade data and statistics.' Create a bar graph tracking minutes on each game this week.",
-          p2:"Real-world percent problems — Khan Academy 'Percents of numbers.' Sale prices, tips, comparisons. Formula: percent × whole = part." },
+          p1_ka: [{ label: "Reading Bar Graphs", url: "https://www.khanacademy.org/math/cc-third-grade-math/imp-measurement-and-data-2/cc-3rd-bar-graphs/v/reading-bar-graphs" }],
+          p2:"Real-world percent problems — Khan Academy 'Percents of numbers.' Sale prices, tips, comparisons. Formula: percent × whole = part.",
+          p2_ka: [{ label: "Finding a Percentage", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-percent-of/v/finding-a-percentage" }] },
         boss:"<strong>Game Stats:</strong> P1 — Mon 45, Tue 20, Wed 60, Thu 30 minutes. Bar graph. Highest day? Total? P2 — 30% win rate, 40 matches — wins? Sword $48, 25% off — sale price? Show work.",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Thursday", type:"ai", emoji:"🤖", xp:65,
@@ -759,7 +880,9 @@ const WEEKS = [
         warmup:"Final round — no calculator: 8×12, 3/4+1/2, perimeter of 7×11, −5+13, (6+4)×3−5. Compare to Week 1!",
         mission:{ split:true,
           p1:"Self-assessment: return to Week 1–2 Khan Academy exercises. Faster? More accurate? Complete 1 multiplication + 1 fractions exercise. Record your score.",
-          p2:"Self-assessment: revisit Week 1–2 ratio + equation exercises. Also: write 3 specific things you could now teach someone else that you didn't know in June." },
+          p1_ka: [{ label: "Multiplication Review", url: "https://www.khanacademy.org/math/cc-fourth-grade-math/imp-multiplication-and-division-2/imp-multiply-by-1-digit-numbers/e/multiplication_3" }, { label: "Fractions Review", url: "https://www.khanacademy.org/math/cc-third-grade-math/imp-fractions/imp-fractions-on-the-number-line/v/fractions-on-a-number-line" }],
+          p2:"Self-assessment: revisit Week 1–2 ratio + equation exercises. Also: write 3 specific things you could now teach someone else that you didn't know in June.",
+          p2_ka: [{ label: "Ratios Review", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios/cc-6th-rates/v/introduction-to-ratios-new-hd" }, { label: "Equations Review", url: "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-equations/v/simple-equations" }] },
         boss:"<strong>Math Showcase:</strong> Create one original math problem — 2+ skill areas from the summer, set in your video game world. Swap with your brother and solve. Award XP for creativity and difficulty!",
         tools:["Khan Academy","Paper + pencil"] },
       { name:"Thursday", type:"ai", emoji:"🤖", xp:70,
@@ -774,7 +897,7 @@ const WEEKS = [
 ];
 
 // ─── STATE ───────────────────────────────────────────────────────────
-const STORAGE_KEY = 'levelUpAcademy_v2';
+const STORAGE_KEY = 'levelUpAcademy_v3';
 let state = { p1: { xp: 0, completed: {} }, p2: { xp: 0, completed: {} } };
 let currentPlayer = null;
 let currentWeek = 0;
@@ -834,11 +957,8 @@ function getWeeksCompleted() {
   return count;
 }
 
-// Streak: consecutive days with a session done (simple approximation using session count)
 function getStreak() {
-  const sessions = getSessionCount();
-  // Simple streak based on sessions in a row
-  return Math.min(sessions, 7);
+  return Math.min(getSessionCount(), 7);
 }
 
 // ─── RENDER ───────────────────────────────────────────────────────────
@@ -864,6 +984,24 @@ function renderWeekNav() {
     const allDone = w.days.every((_, di) => isCompleted(i, di));
     return `<button class="week-pill ${i === currentWeek ? 'active' : ''}" onclick="selectWeek(${i})">${w.icon} ${allDone ? '✅' : ''} Wk ${w.num}</button>`;
   }).join('');
+}
+
+function renderWeekHeader() {
+  const w = WEEKS[currentWeek];
+  const doneDays = w.days.filter((_, di) => isCompleted(currentWeek, di)).length;
+  document.getElementById('weekHeader').innerHTML = `
+    <div class="week-header">
+      <div class="week-icon">${w.icon}</div>
+      <div>
+        <div class="week-title">${w.label}</div>
+        <div class="week-progress">${doneDays} of ${w.days.length} days complete</div>
+      </div>
+    </div>`;
+}
+
+function buildKALinks(links) {
+  if (!links || !links.length) return '';
+  return links.map(l => `<a class="ka-link" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('');
 }
 
 function renderDays() {
@@ -892,20 +1030,33 @@ function renderDays() {
             <div class="free-day-title">🎮 FREE DAY</div>
             ${day.freeText}
           </div>
-          ${!done ? `<div style="padding:0 0 4px"><button class="complete-btn incomplete" onclick="markComplete(${currentWeek}, ${di}, ${day.xp})">🎉 Mark Free Day Done! +${day.xp} XP</button></div>` : `<div style="padding:0 0 4px"><div class="complete-btn completed-state">✅ Completed!</div></div>`}
+          ${!done ? `<button class="complete-btn incomplete" onclick="markComplete(${currentWeek}, ${di}, ${day.xp})">🎉 Mark Free Day Done! +${day.xp} XP</button>` : `<div class="complete-btn completed-state">✅ Completed!</div>`}
         </div>
       </div>`;
     }
 
     let missionHTML = '';
     if (day.mission.split) {
+      const p1ka = buildKALinks(day.mission.p1_ka);
+      const p2ka = buildKALinks(day.mission.p2_ka);
       missionHTML = `<div class="player-split">
-        <div class="split-block split-p1"><div class="split-label">Player 1 · 4th Grade</div><div class="split-content">${day.mission.p1}</div></div>
-        <div class="split-block split-p2"><div class="split-label">Player 2 · 6th Grade</div><div class="split-content">${day.mission.p2}</div></div>
+        <div class="split-block split-p1">
+          <div class="split-label">Player 1 · 4th Grade</div>
+          <div class="split-content">${day.mission.p1}</div>
+          ${p1ka ? `<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">${p1ka}</div>` : ''}
+        </div>
+        <div class="split-block split-p2">
+          <div class="split-label">Player 2 · 6th Grade</div>
+          <div class="split-content">${day.mission.p2}</div>
+          ${p2ka ? `<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">${p2ka}</div>` : ''}
+        </div>
       </div>`;
     } else {
       missionHTML = `<div class="seg-content">${day.mission.content}</div>`;
     }
+
+    const otherTools = (day.tools || []).filter(t => t !== 'Khan Academy');
+    const toolChips = otherTools.map(t => `<span class="tool-chip">${t}</span>`).join('');
 
     return `<div class="day-tile ${done ? 'completed' : ''}" id="${key}">
       <div class="day-tile-header" onclick="toggleDay('${key}')">
@@ -932,7 +1083,7 @@ function renderDays() {
           <div class="seg-header"><span class="seg-badge badge-boss">💀 Boss Battle</span><span class="seg-timer">10 min</span></div>
           <div class="seg-content">${day.boss}</div>
         </div>
-        <div class="tools-row">${(day.tools || []).map(t => `<span class="tool-chip">${t}</span>`).join('')}</div>
+        ${toolChips ? `<div class="tools-row">${toolChips}</div>` : ''}
         ${!done
           ? `<button class="complete-btn incomplete" onclick="markComplete(${currentWeek}, ${di}, ${day.xp})">✅ Session Complete! +${day.xp} XP</button>`
           : `<div class="complete-btn completed-state">✅ Session Completed!</div>`
@@ -945,6 +1096,7 @@ function renderDays() {
 function renderAll() {
   updateHeader();
   renderWeekNav();
+  renderWeekHeader();
   renderDays();
 }
 
@@ -995,10 +1147,7 @@ function markComplete(weekIdx, dayIdx, xpValue) {
 function showXPPopup(xp, day, weekIdx, dayIdx) {
   const allWeekDone = WEEKS[weekIdx].days.every((_, di) => isCompleted(weekIdx, di));
   const icon = day.free ? '🎉' : day.type === 'math' ? '📐' : day.type === 'grammar' ? '✍️' : '🤖';
-  const msgs = [
-    "You're on fire! 🔥", "Crushing it!", "XP earned! 💪",
-    "Level up incoming!", "Quest complete!", "Keep going! ⚡"
-  ];
+  const msgs = ["You're on fire! 🔥", "Crushing it!", "XP earned! 💪", "Level up incoming!", "Quest complete!", "Keep going! ⚡"];
   const sub = allWeekDone ? `🏆 Week ${weekIdx + 1} Complete! Full Week Bonus!` : msgs[Math.floor(Math.random() * msgs.length)];
 
   document.getElementById('popupIcon').textContent = icon;
@@ -1009,7 +1158,6 @@ function showXPPopup(xp, day, weekIdx, dayIdx) {
   document.getElementById('overlay').classList.add('show');
   document.getElementById('xpPopup').classList.add('show');
 
-  // Star burst
   for (let i = 0; i < 8; i++) {
     setTimeout(() => spawnStar(), i * 80);
   }
