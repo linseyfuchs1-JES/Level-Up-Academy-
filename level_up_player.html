@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level Up Academy — Player App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --bg: #0d0d1a;
+  --surface: #151528;
+  --surface2: #1e1e38;
+  --gold: #FFD700;
+  --gold2: #FFA500;
+  --neon-blue: #00D4FF;
+  --neon-green: #00FF88;
+  --neon-purple: #C840FF;
+  --neon-red: #FF4466;
+  --text: #F0EEFF;
+  --text-dim: #7A7A9A;
+  --border: rgba(255,215,0,0.2);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated pixel grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatOrb 8s ease-in-out infinite;
+}
+.orb1 { width: 300px; height: 300px; background: rgba(0,212,255,0.08); top: -100px; left: -100px; animation-delay: 0s; }
+.orb2 { width: 250px; height: 250px; background: rgba(200,64,255,0.08); bottom: -80px; right: -80px; animation-delay: 3s; }
+.orb3 { width: 200px; height: 200px; background: rgba(0,255,136,0.06); top: 40%; left: 60%; animation-delay: 5s; }
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -20px); }
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 20px 16px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── PLAYER SELECT SCREEN ── */
+#playerSelectScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 32px;
+  padding: 40px 20px;
+}
+
+.title-logo {
+  text-align: center;
+}
+.title-main {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(32px, 8vw, 56px);
+  color: var(--gold);
+  text-shadow:
+    0 0 30px rgba(255,215,0,0.6),
+    0 0 60px rgba(255,215,0,0.3),
+    4px 4px 0 rgba(255,100,0,0.5);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.title-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.press-start {
+  font-family: 'Fredoka One', cursive;
+  font-size: 14px;
+  color: var(--neon-blue);
+  letter-spacing: 2px;
+  animation: blink 1.2s step-end infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.player-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.player-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  width: 220px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.player-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.player-card.p1::before { background: radial-gradient(ellipse at center, rgba(0,212,255,0.12), transparent 70%); }
+.player-card.p2::before { background: radial-gradient(ellipse at center, rgba(200,64,255,0.12), transparent 70%); }
+.player-card:hover { transform: translateY(-6px); }
+.player-card.p1:hover { border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0,212,255,0.3); }
+.player-card.p2:hover { border-color: var(--neon-purple); box-shadow: 0 0 30px rgba(200,64,255,0.3); }
+.player-card:hover::before { opacity: 1; }
+
+.player-avatar { font-size: 56px; margin-bottom: 12px; display: block; }
+.player-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+.p1 .player-label { color: var(--neon-blue); }
+.p2 .player-label { color: var(--neon-purple); }
+.player-info { font-size: 13px; color: var(--text-dim); }
+.player-xp {
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.p1 .player-xp { color: var(--neon-blue); }
+.p2 .player-xp { color: var(--neon-purple); }
+
+/* ── MAIN APP ── */
+#mainApp { display: none; }
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.back-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-dim);
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.back-btn:hover { border-color: var(--gold); color: var(--gold); }
+.header-info { flex: 1; }
+.header-player {
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+}
+.header-player.p1c { color: var(--neon-blue); }
+.header-player.p2c { color: var(--neon-purple); }
+.header-sub { font-size: 12px; color: var(--text-dim); }
+.header-xp {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 14px;
+  text-align: center;
+}
+.xp-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 20px;
+  color: var(--gold);
+  line-height: 1;
+}
+.xp-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+
+/* XP bar */
+.xp-bar-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+.xp-bar-header { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-weight: 700; letter-spacing: 1px; }
+.xp-bar-track {
+  height: 10px;
+  background: var(--surface2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.xp-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--gold2), var(--gold));
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 10px rgba(255,215,0,0.5);
+}
+
+/* Week selector */
+.week-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+.week-scroll::-webkit-scrollbar { display: none; }
+.week-pill {
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.week-pill:hover { border-color: var(--gold); color: var(--gold); }
+.week-pill.active { background: var(--gold); border-color: var(--gold); color: #0d0d1a; }
+.week-pill.locked { opacity: 0.4; cursor: not-allowed; }
+
+/* Day cards */
+.days-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+
+.day-tile {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.day-tile.completed { border-color: rgba(0,255,136,0.4); }
+.day-tile.active-day { border-color: rgba(255,215,0,0.5); }
+
+.day-tile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+}
+.day-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.icon-math { background: rgba(0,212,255,0.15); }
+.icon-grammar { background: rgba(200,64,255,0.15); }
+.icon-ai { background: rgba(0,255,136,0.15); }
+.icon-free { background: rgba(255,68,102,0.15); }
+
+.day-meta { flex: 1; }
+.day-name { font-weight: 800; font-size: 15px; }
+.day-type { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+.day-status { display: flex; align-items: center; gap: 8px; }
+.check-circle {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: all 0.3s;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+.check-circle.done { background: var(--neon-green); border-color: var(--neon-green); color: #0d0d1a; }
+.day-xp-badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.day-body {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: 0 18px 16px;
+}
+.day-tile.open .day-body { display: block; }
+.day-tile.open .day-tile-header { border-bottom: none; }
+
+/* Segments */
+.seg-block { margin-top: 14px; }
+.seg-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.seg-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.badge-warmup { background: rgba(255,165,0,0.2); color: var(--gold2); }
+.badge-mission { background: rgba(0,212,255,0.2); color: var(--neon-blue); }
+.badge-boss { background: rgba(255,68,102,0.2); color: var(--neon-red); }
+.seg-timer { font-size: 10px; color: var(--text-dim); font-weight: 700; }
+.seg-content { font-size: 13px; line-height: 1.65; color: var(--text); }
+.seg-content strong { color: var(--gold); }
+
+.player-split { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.split-block { flex: 1; min-width: 160px; border-radius: 10px; padding: 10px 12px; }
+.split-p1 { background: rgba(0,212,255,0.07); border: 1px solid rgba(0,212,255,0.2); }
+.split-p2 { background: rgba(200,64,255,0.07); border: 1px solid rgba(200,64,255,0.2); }
+.split-label { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.split-p1 .split-label { color: var(--neon-blue); }
+.split-p2 .split-label { color: var(--neon-purple); }
+.split-content { font-size: 12px; line-height: 1.5; }
+
+.tools-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.tool-chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+.tool-chip::before { content: '🛠 '; }
+
+/* Complete button */
+.complete-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.complete-btn.incomplete {
+  background: linear-gradient(135deg, var(--gold2), var(--gold));
+  color: #0d0d1a;
+  box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+}
+.complete-btn.incomplete:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,215,0,0.4); }
+.complete-btn.completed-state {
+  background: rgba(0,255,136,0.15);
+  border: 2px solid var(--neon-green);
+  color: var(--neon-green);
+  cursor: default;
+}
+
+/* Free day tile */
+.free-day-body { padding: 14px 18px; color: var(--text-dim); font-size: 13px; line-height: 1.65; }
+.free-day-title { font-family: 'Fredoka One', cursive; font-size: 14px; color: var(--neon-red); margin-bottom: 6px; }
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat-num { font-family: 'Fredoka One', cursive; font-size: 26px; color: var(--gold); line-height: 1; }
+.stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; font-weight: 700; }
+
+/* XP popup */
+.xp-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: var(--surface);
+  border: 3px solid var(--gold);
+  border-radius: 24px;
+  padding: 32px 48px;
+  text-align: center;
+  z-index: 100;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 60px rgba(255,215,0,0.4);
+}
+.xp-popup.show { transform: translate(-50%, -50%) scale(1); }
+.popup-icon { font-size: 56px; margin-bottom: 8px; }
+.popup-title { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--gold); }
+.popup-xp { font-family: 'Fredoka One', cursive; font-size: 48px; color: var(--neon-green); line-height: 1; }
+.popup-sub { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+.popup-close {
+  margin-top: 20px;
+  background: var(--gold);
+  border: none;
+  border-radius: 12px;
+  padding: 10px 32px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  color: #0d0d1a;
+  cursor: pointer;
+  transition: transform 0.15s;
+  font-family: inherit;
+}
+.popup-close:hover { transform: scale(1.05); }
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 99;
+  display: none;
+}
+.overlay.show { display: block; }
+
+/* Stars burst */
+.star-burst {
+  position: fixed;
+  pointer-events: none;
+  z-index: 101;
+  font-size: 24px;
+  animation: burstAnim 1s ease-out forwards;
+}
+@keyframes burstAnim {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.3); }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- Player Select -->
+<div id="playerSelectScreen">
+  <div class="title-logo">
+    <div class="title-main">⚔️ LEVEL UP<br>ACADEMY</div>
+    <div class="title-sub">Summer Bridge Program</div>
+  </div>
+  <div class="press-start">▶ CHOOSE YOUR PLAYER</div>
+  <div class="player-cards">
+    <div class="player-card p1" onclick="selectPlayer(1)">
+      <span class="player-avatar">🧑‍🚀</span>
+      <div class="player-label">PLAYER 1</div>
+      <div class="player-info">Age 9 · Rising 4th Grade</div>
+      <div class="player-xp" id="p1xpDisplay">⚡ 0 XP</div>
+    </div>
+    <div class="player-card p2" onclick="selectPlayer(2)">
+      <span class="player-avatar">🧙‍♂️</span>
+      <div class="player-label">PLAYER 2</div>
+      <div class="player-info">Age 11 · Rising 6th Grade</div>
+      <div class="player-xp" id="p2xpDisplay">⚡ 0 XP</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main App -->
+<div id="mainApp">
+  <div class="container">
+    <div class="app-header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-info">
+        <div class="header-player" id="headerPlayerName">Player 1</div>
+        <div class="header-sub" id="headerPlayerSub">Age 9 · Rising 4th Grade</div>
+      </div>
+      <div class="header-xp">
+        <div class="xp-num" id="headerXP">0</div>
+        <div class="xp-label">XP</div>
+      </div>
+    </div>
+
+    <div class="xp-bar-wrap">
+      <div class="xp-bar-header">
+        <span id="levelLabel">LEVEL 1</span>
+        <span id="xpToNext">0 / 200 XP</span>
+      </div>
+      <div class="xp-bar-track">
+        <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num" id="statSessions">0</div>
+        <div class="stat-label">Sessions Done</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statStreak">0</div>
+        <div class="stat-label">Day Streak 🔥</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statWeeks">0</div>
+        <div class="stat-label">Weeks Done</div>
+      </div>
+    </div>
+
+    <div class="week-scroll" id="weekScroll"></div>
+    <div class="days-list" id="daysList"></div>
+  </div>
+</div>
+
+<!-- XP Popup -->
+<div class="overlay" id="overlay" onclick="closePopup()"></div>
+<div class="xp-popup" id="xpPopup">
+  <div class="popup-icon" id="popupIcon">⭐</div>
+  <div class="popup-title" id="popupTitle">SESSION COMPLETE!</div>
+  <div class="popup-xp" id="popupXP">+50 XP</div>
+  <div class="popup-sub" id="popupSub">Keep going!</div>
+  <button class="popup-close" onclick="closePopup()">AWESOME! 🎮</button>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────
+const LEVELS = [
+  { name: "Novice", xp: 0 }, { name: "Apprentice", xp: 200 },
+  { name: "Warrior", xp: 500 }, { name: "Knight", xp: 900 },
+  { name: "Hero", xp: 1400 }, { name: "Champion", xp: 2000 },
+  { name: "Legend", xp: 2700 }, { name: "Master", xp: 3500 }
+];
+
+const XP_VALUES = { math: 50, grammar: 45, ai: 55, free: 20 };
+
+const WEEKS = [
+  {
+    num:1, icon:"🗺️", label:"Week 1: The Foundation",
+    days:[
+      { name:"Monday", type:"math", emoji:"📐", xp:50,
+        warmup:"Times table race: set a 3-minute timer, write out the 6s, 7s, and 8s tables from memory.",
+        mission:{ split:true,
+          p1:"Multiplication fluency — Khan Academy (4th grade → Multiply 1-digit by 2-digit numbers). Complete 1 exercise set.",
+          p2:"Intro to ratios — Khan Academy 'Basic ratios' video + first practice set. Think: Minecraft recipe makes 4 torches with 2 coal — what's the ratio?" },
+        boss:"<strong>Minecraft Math:</strong> Farm is 9×7 blocks. Total blocks? P1: Split into 3 equal sections — how many each? P2: 3:1 dirt-to-stone border, 20-block perimeter — how many of each?",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Tuesday", type:"grammar", emoji:"✍️", xp:45,
+        warmup:"Fix-it: 'yesterday me and my brother goes to the store and buyed snacks' — find and correct every error.",
+        mission:{ split:false, content:"Parts of speech in context. Write 5 sentences about your favorite game in Google Docs. Label every noun, verb, adjective, and adverb. Challenge: rewrite 2 sentences with stronger adjectives ('the big sword' → 'the massive, glowing sword')." },
+        boss:"<strong>Game Design Writing:</strong> Opening paragraph of your imaginary Roblox game. P1: 2+ adjectives, 1 adverb, 1 compound sentence. P2: also add a relative clause ('which,' 'that,' or 'who').",
+        tools:["Google Docs"] },
+      { name:"Wednesday", type:"math", emoji:"📐", xp:50,
+        warmup:"Mental math sprint (out loud, no writing): 48÷6, 7×9, 63÷7, 8×12, 56÷8.",
+        mission:{ split:true,
+          p1:"Intro to fractions — Khan Academy 'What is a fraction?' + 'Fractions on a number line.' Pizza: 8 slices, you eat 3 — write both fractions.",
+          p2:"Unit rates — Khan Academy 'Intro to rates.' Link runs 12 rooms in 4 minutes — rate per minute? 3 Roblox servers, 20 players each — total players?" },
+        boss:"<strong>Zelda Inventory:</strong> P1 — Link has 12 arrows, used ¾. How many left? Draw it. P2 — 3:2 gem-to-rupee trade ratio, 18 gems. Rupees? What if only ⅔ of gems are traded?",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Thursday", type:"ai", emoji:"🤖", xp:55,
+        warmup:"Ask Claude: 'What is 7×8?' Then: 'What is 7×8 — explain it like I'm 9.' What changed between the two answers?",
+        mission:{ split:false, content:"<strong>What IS Generative AI?</strong> Try 3 prompts in Claude: (1) 'Describe Minecraft in one sentence' (2) same but 'like a pirate' (3) same but 'as a math teacher.' Same question — totally different answers. Claude predicts words, it doesn't think. Try to catch it being wrong about something you know!" },
+        boss:"<strong>Fact Check Challenge:</strong> Ask Claude a Minecraft/Roblox/Zelda question you already know the answer to. Correct? Now ask one you don't know — how would you verify it? Write 2 sentences about what you learned.",
+        tools:["Claude.ai","Google Docs"] },
+      { name:"Friday", type:"free", emoji:"🕹️", xp:20, free:true,
+        freeText:"No structured session! Build something in Minecraft using a rectangle or symmetry — notice the math. Or just read and relax. This day is yours." }
+    ]
+  },
+  {
+    num:2, icon:"⚔️", label:"Week 2: Sharpen the Sword",
+    days:[
+      { name:"Monday", type:"math", emoji:"📐", xp:50,
+        warmup:"Write out the 9s and 11s times tables. Pattern check: do all 9s answers have digits that add to 9?",
+        mission:{ split:true,
+          p1:"Multi-digit multiplication — Khan Academy '2-digit by 2-digit.' Try 23×14: box method first, then standard algorithm.",
+          p2:"Equivalent ratios — Khan Academy 'Equivalent ratios.' Roblox game earns 5 coins/min — fill a table for 1–6 minutes. What's the pattern?" },
+        boss:"<strong>Roblox Server Math:</strong> P1 — 23 items, 14 copies each — total? P2 — 5 players, each earns 12 coins at 3:2 (coins:gems) ratio — total gems across all players?",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Tuesday", type:"grammar", emoji:"✍️", xp:45,
+        warmup:"Add commas: 'I like swords shields potions and bows' and 'Before you enter the dungeon check your inventory.'",
+        mission:{ split:false, content:"Compound + complex sentences. Learn FANBOYS (For, And, Nor, But, Or, Yet, So) — write 3 compound sentences. Learn subordinating conjunctions (because, although, when, if) — write 3 complex sentences. P2 bonus: combine into compound-complex." },
+        boss:"<strong>Quest Log Entry:</strong> 5–7 sentences for an imaginary Zelda dungeon. Must include: 1 compound sentence, 1 complex sentence, correct commas, 1 apostrophe. P2: also include a semicolon.",
+        tools:["Google Docs"] },
+      { name:"Wednesday", type:"math", emoji:"📐", xp:50,
+        warmup:"Estimate: is 47×8 closer to 320, 380, or 420? Explain before calculating. How close were you?",
+        mission:{ split:true,
+          p1:"Comparing fractions — Khan Academy 'Comparing fractions.' Which is bigger: 3/4 or 2/3? Draw both on a number line to prove it.",
+          p2:"Intro to percents — Khan Academy 'Intro to percents.' 3 of 5 players win — what percent? Convert: 1/4, 3/10, 7/20 to percentages." },
+        boss:"<strong>Minecraft Loot Drop:</strong> P1 — 6 of 8 chest slots filled. Fraction? Bigger: 6/8 of this chest or 3/4 of another? P2 — 60% of 25 dungeon chests have diamonds. How many? Two ways.",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Thursday", type:"ai", emoji:"🤖", xp:55,
+        warmup:"Ask Claude to fix: 'me and him runned to the store and buyed food.' Every change correct? Anything missed?",
+        mission:{ split:false, content:"<strong>Prompt Quality Experiment:</strong> Same task, 3 prompts: (1) 'write about a game' (2) '3-sentence Minecraft adventure game description' (3) same + 'for 10-year-olds who like exploration, using exciting language.' Compare all 3. What made prompt 3 work?" },
+        boss:"<strong>Prompt Your Own Quiz:</strong> Ask Claude for grammar questions at your level (P1: 4th grade commas; P2: compound/complex sentences for 6th grade). Answer the questions, then ask Claude to explain each answer.",
+        tools:["Claude.ai","Google Docs"] },
+      { name:"Friday", type:"free", emoji:"🕹️", xp:20, free:true,
+        freeText:"Free day! Wild card: cook or bake something and double the recipe — real fraction and ratio math. Or just play. You earned it!" }
+    ]
+  },
+  {
+    num:3, icon:"🔥", label:"Week 3: Power Up",
+    days:[
+      { name:"Monday", type:"math", emoji:"📐", xp:55,
+        warmup:"Order of operations: 3 + 4 × 2 = ? Then 10 − 2 × 3 + 1 = ? (Don't just go left to right!) PEMDAS!",
+        mission:{ split:true,
+          p1:"Adding/subtracting fractions with like denominators — Khan Academy. Add numerators only, keep denominator. Practice: 2/8+3/8, 7/10−4/10. Simplify!",
+          p2:"Order of operations with all four operations + parentheses — Khan Academy 'PEMDAS.' Work through 5 problems step by step." },
+        boss:"<strong>Potion Crafting:</strong> P1 — Have 5/12, collect 4/12, use 3/12. How much left? Show each step. P2 — Evaluate (3+7)×2−4÷2. Write your own crafting formula using all 4 ops + parentheses. Swap with your brother!",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Tuesday", type:"grammar", emoji:"✍️", xp:50,
+        warmup:"Apostrophe fix: 'the players sword broke but its hilt was shiny. theyre going to the village.' Add apostrophes and explain each.",
+        mission:{ split:true,
+          p1:"Paragraph structure: topic sentence → 3 details → closing. Write a 5-sentence paragraph: 'My favorite thing about [game].'",
+          p2:"Paragraph structure + transitions (first, additionally, however, finally). Write a 6-sentence paragraph with 3+ transitions: 'Why [game] is more interesting than people think.'" },
+        boss:"<strong>Tutorial Writing:</strong> 5–6 sentences explaining ONE thing in Minecraft/Roblox for someone who's never played. P1: clear topic + closing. P2: transitions that guide the reader through steps in order.",
+        tools:["Google Docs"] },
+      { name:"Wednesday", type:"math", emoji:"📐", xp:55,
+        warmup:"Negative numbers intro: 5 degrees, drops 8 — new temp? Owe 3 coins, earn 7 — total? Where do negatives show up in real life?",
+        mission:{ split:true,
+          p1:"Unlike denominators (preview) — Khan Academy 'Common denominators.' Convert 1/2 to 2/4 to add 1/2 + 1/4. Why do the bottoms have to match?",
+          p2:"Negative numbers on a number line + adding negatives — Khan Academy. Think: Zelda health bar below zero. 6 practice problems." },
+        boss:"<strong>Underground Mining:</strong> P1 — Dig down 3/4, then 1/4 more, climb up 2/4. Where are you? P2 — Start at 0. Dig −5. Go up 3 (−2). Fall down 4. What level? Write the equation.",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Thursday", type:"ai", emoji:"🤖", xp:60,
+        warmup:"Ask Claude 'Explain what a noun is.' Then 'Explain what a noun is, but you are a pirate captain.' How did the role change the style?",
+        mission:{ split:false, content:"<strong>Prompt Engineering: Role + Task + Constraints.</strong> Formula: 'You are a [ROLE]. [TASK]. [CONSTRAINTS].' Try: 'You are a strict grammar teacher. Review this paragraph and list every grammar error — no more than 2 sentences per error.' Use one of Tuesday's pieces. Also try: 'You are a Zelda dungeon designer. Create a dungeon with exactly 3 rooms, each with a math puzzle, for a 10-year-old.'" },
+        boss:"<strong>Design Your Own Prompt:</strong> Each player writes one prompt using Role + Task + Constraint. Share with the other — is the role clear? Task specific? Real constraints? Improve together, then run it.",
+        tools:["Claude.ai","Google Docs"] },
+      { name:"Friday", type:"free", emoji:"🕹️", xp:20, free:true,
+        freeText:"Free day! Halfway through — celebrate! High energy option: measure every room in the house, calculate the area of each. Make it a competition!" }
+    ]
+  },
+  {
+    num:4, icon:"🌟", label:"Week 4: Level Grind",
+    days:[
+      { name:"Monday", type:"math", emoji:"📐", xp:60,
+        warmup:"About how many minutes old are you? (age × 365 × 24 × 60 — estimate first, then calculator). How close?",
+        mission:{ split:true,
+          p1:"Multiplying fractions by whole numbers — Khan Academy. 3 × 2/5, 4 × 3/8. Real use: each player gets 2/3 of a screen — 4 players total?",
+          p2:"Variables + expressions — Khan Academy 'Intro to variables.' 'A number plus 5' = x + 5. Evaluate 2x + 4 when x = 3. Practice 6 expressions." },
+        boss:"<strong>Roblox Shop:</strong> P1 — Items cost 2/5 of a coin. Buy 6 — total? P2 — Sword costs (x+3) coins, x = your level. Write expressions: shield = 2×level−2, potion = level÷2+5. Evaluate all at level 10.",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Tuesday", type:"grammar", emoji:"✍️", xp:55,
+        warmup:"Fix: 'Watch out shouted Link as he dodged the arrow' and 'The sign read danger zone no entry.' Add correct punctuation.",
+        mission:{ split:true,
+          p1:"Dialogue writing — 3 rules: (1) quotes around speech, (2) comma inside quotes before tag, (3) new speaker = new paragraph. Rewrite a 4-line game character exchange correctly.",
+          p2:"Dialogue + narration — same rules + vary tags (said → whispered/shouted/muttered) and add action beats between dialogue lines. Write a 6-line Zelda character exchange." },
+        boss:"<strong>Cut Scene Script:</strong> 8–10 lines of dialogue + narration for your imaginary game opening. P1: 3+ characters, correct quotes, varied tags. P2: all of above + 2 action beats. Read aloud — natural?",
+        tools:["Google Docs"] },
+      { name:"Wednesday", type:"math", emoji:"📐", xp:60,
+        warmup:"Negative sprint (out loud): −3+7, 5−9, −4−3, −6+6, 2−10. Number line on paper if needed.",
+        mission:{ split:true,
+          p1:"Area and perimeter word problems — Khan Academy. Formulas: A = l×w, P = 2(l+w). Draw a diagram for each of 4 problems.",
+          p2:"One-step equations — Khan Academy. Inverse operations: x+5=12 → subtract 5 → x=7. Write every step. 8 problems." },
+        boss:"<strong>Dungeon Architect:</strong> P1 — Design 4 rectangular rooms (make up dimensions). Area and perimeter each. Most floor space? P2 — Room length = x+3 where x = room number. Room needs area 30, width 5. Solve for length.",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Thursday", type:"ai", emoji:"🤖", xp:60,
+        warmup:"Paste your Tuesday cut scene into Claude: 'Identify any grammar errors and explain each one.' Anything you missed? Anything it got wrong?",
+        mission:{ split:false, content:"<strong>AI as Learning Partner — Not a Cheat Code.</strong> Feel the difference: BAD → 'Write me a paragraph about fractions.' GOOD → 'Explain why you need a common denominator to add fractions, use a pizza example, then give me 3 practice problems.' Try both. Which one made you smarter? Which one did the learning for you?" },
+        boss:"<strong>AI Study Session:</strong> Pick ONE topic from the past 4 weeks that was hard. Ask Claude for a mini-lesson: explanation + gaming example + 3 practice problems. Work the problems on paper, then ask Claude to check. Learn something new?",
+        tools:["Claude.ai"] },
+      { name:"Friday", type:"free", emoji:"🕹️", xp:20, free:true,
+        freeText:"Free day! Optional: find 3 examples of math in your video game this week — coordinates, crafting ratios, health fractions, timer countdowns. Report back Monday!" }
+    ]
+  },
+  {
+    num:5, icon:"🏆", label:"Week 5: Apply the Skills",
+    days:[
+      { name:"Monday", type:"math", emoji:"📐", xp:65,
+        warmup:"Lightning round (no calculator): 7×8, 3/4+1/4, perimeter of 5×9, −3+10, (2+3)×4. GO!",
+        mission:{ split:true,
+          p1:"Multi-step word problems — Khan Academy '4th grade word problems.' Draw a diagram for every problem before calculating. 3–4 problems.",
+          p2:"Two-step equations — Khan Academy. 2x+3=11 → subtract 3 → 2x=8 → divide 2 → x=4. Write every step. 6 problems." },
+        boss:"<strong>Grand Tournament:</strong> P1 — 4 players, 24 coins each. Round 1: each loses 1/3. Winner gets half of everyone's remaining. Total for winner? P2 — Prize pool = (3x−5) where x = matches. Pool was 22. How many matches? Add 2 more — new pool?",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Tuesday", type:"grammar", emoji:"✍️", xp:55,
+        warmup:"Choose: 'The group (was/were) ready.' 'Neither sword nor shields (was/were) enchanted.' 'Everyone (has/have) a potion.' Explain each.",
+        mission:{ split:false, content:"<strong>Editing + Revision.</strong> Open any writing from Weeks 1–4. Full revision: (1) Read aloud — anything awkward? (2) Check S-V agreement in every sentence (3) Check all commas, apostrophes, quotation marks (4) Strengthen weak verbs and adjectives (5) Topic + closing sentence in every paragraph. Make real edits." },
+        boss:"<strong>Peer Edit:</strong> Take one of your brother's earlier pieces. Write 3 specific, constructive comments — not 'it's good.' Say exactly what works and exactly what could be stronger. Discuss. This is what real editors do.",
+        tools:["Google Docs"] },
+      { name:"Wednesday", type:"math", emoji:"📐", xp:65,
+        warmup:"Mental percent: 50% of 80? 25% of 40? 10% of 130? How do you find 15% without a calculator? (10% + half of 10%)",
+        mission:{ split:true,
+          p1:"Reading + creating bar graphs — Khan Academy '4th grade data and statistics.' Create a bar graph tracking minutes on each game this week.",
+          p2:"Real-world percent problems — Khan Academy 'Percents of numbers.' Sale prices, tips, comparisons. Formula: percent × whole = part." },
+        boss:"<strong>Game Stats:</strong> P1 — Mon 45, Tue 20, Wed 60, Thu 30 minutes. Bar graph. Highest day? Total? P2 — 30% win rate, 40 matches — wins? Sword $48, 25% off — sale price? Show work.",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Thursday", type:"ai", emoji:"🤖", xp:65,
+        warmup:"Ask Claude: 'What can agentic AI do that regular chatbots cannot?' What questions does the answer raise for you?",
+        mission:{ split:false, content:"<strong>Agentic AI — When AI Takes Actions.</strong> Regular AI: answers questions. Agentic AI: takes steps — searches web, writes code, sends emails, manages files, controls software. Real examples: books your travel, sorts your inbox, plays a game for you. Discuss: When helpful? When risky? Who's responsible if it makes a mistake? Each player lists: 3 things you'd want AI to do FOR you, 3 things you'd always do yourself." },
+        boss:"<strong>AI Ethics Debate:</strong> 'AI should help with schoolwork if it teaches you' vs. 'AI should never do your schoolwork.' Argue one side each — even if you disagree with it. Then switch sides. What was the strongest argument you heard?",
+        tools:["Claude.ai","Google Docs"] },
+      { name:"Friday", type:"free", emoji:"🕹️", xp:20, free:true,
+        freeText:"Free day! One more week. Consider brainstorming your capstone Game Design Document this weekend — just ideas. What is your game called? What does it feel like to play?" }
+    ]
+  },
+  {
+    num:6, icon:"👑", label:"Week 6: Final Boss",
+    days:[
+      { name:"Monday", type:"math", emoji:"📐", xp:70,
+        warmup:"No notes: define ratio, variable, common denominator, order of operations, negative number. In your own words.",
+        mission:{ split:true,
+          p1:"Capstone math — build your game's economy. Price list with 6+ items. Coins earned per level. How many levels to afford the best item? Show fraction + multiplication work.",
+          p2:"Capstone math — scoring system with expressions. score = 10x + 5y (x=wins, y=bonuses). Ratio table for level progression. If 7 bonuses earned, how many wins to reach 100 total score?" },
+        boss:"<strong>Math Integration:</strong> How does the economy interact with scoring? P1: player earns 1/3 of item cost per level — levels needed per item? P2: break-even score if entry costs 15 coins but earns (10x+3) coins where x = rank?",
+        tools:["Paper + pencil","Google Docs"] },
+      { name:"Tuesday", type:"grammar", emoji:"✍️", xp:60,
+        warmup:"Final audit: list every grammar rule learned this summer from memory. Challenge: use 5 of them correctly in one paragraph.",
+        mission:{ split:false, content:"<strong>Capstone — Game Design Document Overview.</strong> Together: (1) Game title + tagline (2) 3-sentence description (3) Target audience (4) What makes it unique? P1 writes sections 1–2. P2 writes 3–4. Then swap and edit each other using Week 5 revision skills." },
+        boss:"<strong>Write a Review of This Program:</strong> 5 sentences: topic sentence + 3 details (what worked, what was hard, what you'd change) + closing. Grammar counts. This is real feedback about Level Up Academy.",
+        tools:["Google Docs"] },
+      { name:"Wednesday", type:"math", emoji:"📐", xp:70,
+        warmup:"Final round — no calculator: 8×12, 3/4+1/2, perimeter of 7×11, −5+13, (6+4)×3−5. Compare to Week 1!",
+        mission:{ split:true,
+          p1:"Self-assessment: return to Week 1–2 Khan Academy exercises. Faster? More accurate? Complete 1 multiplication + 1 fractions exercise. Record your score.",
+          p2:"Self-assessment: revisit Week 1–2 ratio + equation exercises. Also: write 3 specific things you could now teach someone else that you didn't know in June." },
+        boss:"<strong>Math Showcase:</strong> Create one original math problem — 2+ skill areas from the summer, set in your video game world. Swap with your brother and solve. Award XP for creativity and difficulty!",
+        tools:["Khan Academy","Paper + pencil"] },
+      { name:"Thursday", type:"ai", emoji:"🤖", xp:70,
+        warmup:"AI reflection: ONE concrete thing you know about AI now that you didn't in June. ONE thing you're still curious about.",
+        mission:{ split:false, content:"<strong>AI-Assisted Capstone Finish.</strong> Use Claude to finalize your Game Design Document — but YOU stay in control. You write, Claude assists. Try: 'Review this section for grammar errors only — don't rewrite it.' or 'Suggest 3 dungeon names based on this description.' or 'Is this sentence clear? How might it be clearer?' You are the designers. Claude is your tool." },
+        boss:"<strong>AI Policy Statement:</strong> Write 4–5 sentences: 'What should someone know before using AI?' This becomes the AI Policy on the last page of your Game Design Document — your studio's official stance. P2: expand to a full paragraph.",
+        tools:["Claude.ai","Google Docs"] },
+      { name:"Friday", type:"free", emoji:"🕹️", xp:25, free:true,
+        freeText:"🎓 GRADUATION DAY! Present your Game Design Document to the family. Walk them through the math system, the story, and your AI Policy. Then celebrate with the game of your choice. YOU DID IT!" }
+    ]
+  }
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────
+const STORAGE_KEY = 'levelUpAcademy_v2';
+let state = { p1: { xp: 0, completed: {} }, p2: { xp: 0, completed: {} } };
+let currentPlayer = null;
+let currentWeek = 0;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) state = JSON.parse(raw);
+  } catch(e) {}
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function getPlayerState() {
+  return currentPlayer === 1 ? state.p1 : state.p2;
+}
+
+function getDayKey(weekIdx, dayIdx) {
+  return `w${weekIdx}_d${dayIdx}`;
+}
+
+function isCompleted(weekIdx, dayIdx) {
+  return !!getPlayerState().completed[getDayKey(weekIdx, dayIdx)];
+}
+
+function getTotalXP() { return getPlayerState().xp; }
+
+function getLevel() {
+  const xp = getTotalXP();
+  let level = 0;
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (xp >= LEVELS[i].xp) { level = i; break; }
+  }
+  return level;
+}
+
+function getLevelProgress() {
+  const xp = getTotalXP();
+  const lvl = getLevel();
+  const curr = LEVELS[lvl].xp;
+  const next = LEVELS[lvl + 1] ? LEVELS[lvl + 1].xp : curr + 500;
+  return { pct: Math.min(100, ((xp - curr) / (next - curr)) * 100), curr: xp - curr, total: next - curr, nextName: LEVELS[lvl + 1]?.name || 'MAX' };
+}
+
+function getSessionCount() {
+  return Object.keys(getPlayerState().completed).length;
+}
+
+function getWeeksCompleted() {
+  let count = 0;
+  WEEKS.forEach((w, wi) => {
+    const done = w.days.every((_, di) => isCompleted(wi, di));
+    if (done) count++;
+  });
+  return count;
+}
+
+// Streak: consecutive days with a session done (simple approximation using session count)
+function getStreak() {
+  const sessions = getSessionCount();
+  // Simple streak based on sessions in a row
+  return Math.min(sessions, 7);
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────
+function updateHeader() {
+  const xp = getTotalXP();
+  const lvl = getLevel();
+  const prog = getLevelProgress();
+  document.getElementById('headerXP').textContent = xp;
+  document.getElementById('headerPlayerName').textContent = `${LEVELS[lvl].name} — Player ${currentPlayer}`;
+  document.getElementById('headerPlayerName').className = `header-player p${currentPlayer}c`;
+  document.getElementById('headerPlayerSub').textContent = currentPlayer === 1 ? 'Age 9 · Rising 4th Grade' : 'Age 11 · Rising 6th Grade';
+  document.getElementById('levelLabel').textContent = `LEVEL ${lvl + 1}: ${LEVELS[lvl].name.toUpperCase()}`;
+  document.getElementById('xpToNext').textContent = `${prog.curr} / ${prog.total} XP → ${prog.nextName}`;
+  document.getElementById('xpBarFill').style.width = prog.pct + '%';
+  document.getElementById('statSessions').textContent = getSessionCount();
+  document.getElementById('statStreak').textContent = getStreak();
+  document.getElementById('statWeeks').textContent = getWeeksCompleted();
+}
+
+function renderWeekNav() {
+  const nav = document.getElementById('weekScroll');
+  nav.innerHTML = WEEKS.map((w, i) => {
+    const allDone = w.days.every((_, di) => isCompleted(i, di));
+    return `<button class="week-pill ${i === currentWeek ? 'active' : ''}" onclick="selectWeek(${i})">${w.icon} ${allDone ? '✅' : ''} Wk ${w.num}</button>`;
+  }).join('');
+}
+
+function renderDays() {
+  const list = document.getElementById('daysList');
+  const week = WEEKS[currentWeek];
+  list.innerHTML = week.days.map((day, di) => {
+    const done = isCompleted(currentWeek, di);
+    const iconClass = `icon-${day.type}`;
+    const key = `day-${currentWeek}-${di}`;
+
+    if (day.free) {
+      return `<div class="day-tile ${done ? 'completed' : ''}" id="${key}">
+        <div class="day-tile-header" onclick="toggleDay('${key}')">
+          <div class="day-icon ${iconClass}">${day.emoji}</div>
+          <div class="day-meta">
+            <div class="day-name">${day.name}</div>
+            <div class="day-type">Free Day 🎉</div>
+          </div>
+          <div class="day-status">
+            <div class="day-xp-badge">+${day.xp} XP</div>
+            <button class="check-circle ${done ? 'done' : ''}" onclick="event.stopPropagation(); markComplete(${currentWeek}, ${di}, ${day.xp})">${done ? '✓' : ''}</button>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="free-day-body">
+            <div class="free-day-title">🎮 FREE DAY</div>
+            ${day.freeText}
+          </div>
+          ${!done ? `<div style="padding:0 0 4px"><button class="complete-btn incomplete" onclick="markComplete(${currentWeek}, ${di}, ${day.xp})">🎉 Mark Free Day Done! +${day.xp} XP</button></div>` : `<div style="padding:0 0 4px"><div class="complete-btn completed-state">✅ Completed!</div></div>`}
+        </div>
+      </div>`;
+    }
+
+    let missionHTML = '';
+    if (day.mission.split) {
+      missionHTML = `<div class="player-split">
+        <div class="split-block split-p1"><div class="split-label">Player 1 · 4th Grade</div><div class="split-content">${day.mission.p1}</div></div>
+        <div class="split-block split-p2"><div class="split-label">Player 2 · 6th Grade</div><div class="split-content">${day.mission.p2}</div></div>
+      </div>`;
+    } else {
+      missionHTML = `<div class="seg-content">${day.mission.content}</div>`;
+    }
+
+    return `<div class="day-tile ${done ? 'completed' : ''}" id="${key}">
+      <div class="day-tile-header" onclick="toggleDay('${key}')">
+        <div class="day-icon ${iconClass}">${day.emoji}</div>
+        <div class="day-meta">
+          <div class="day-name">${day.name}</div>
+          <div class="day-type">${day.type.charAt(0).toUpperCase() + day.type.slice(1)}</div>
+        </div>
+        <div class="day-status">
+          <div class="day-xp-badge">+${day.xp} XP</div>
+          <button class="check-circle ${done ? 'done' : ''}" onclick="event.stopPropagation(); markComplete(${currentWeek}, ${di}, ${day.xp})">${done ? '✓' : ''}</button>
+        </div>
+      </div>
+      <div class="day-body">
+        <div class="seg-block">
+          <div class="seg-header"><span class="seg-badge badge-warmup">🔥 Warm-Up</span><span class="seg-timer">5 min</span></div>
+          <div class="seg-content">${day.warmup}</div>
+        </div>
+        <div class="seg-block">
+          <div class="seg-header"><span class="seg-badge badge-mission">⚔️ Main Mission</span><span class="seg-timer">15 min</span></div>
+          ${missionHTML}
+        </div>
+        <div class="seg-block">
+          <div class="seg-header"><span class="seg-badge badge-boss">💀 Boss Battle</span><span class="seg-timer">10 min</span></div>
+          <div class="seg-content">${day.boss}</div>
+        </div>
+        <div class="tools-row">${(day.tools || []).map(t => `<span class="tool-chip">${t}</span>`).join('')}</div>
+        ${!done
+          ? `<button class="complete-btn incomplete" onclick="markComplete(${currentWeek}, ${di}, ${day.xp})">✅ Session Complete! +${day.xp} XP</button>`
+          : `<div class="complete-btn completed-state">✅ Session Completed!</div>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll() {
+  updateHeader();
+  renderWeekNav();
+  renderDays();
+}
+
+// ─── ACTIONS ─────────────────────────────────────────────────────────
+function selectPlayer(p) {
+  currentPlayer = p;
+  document.getElementById('playerSelectScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  renderAll();
+  updateSelectScreen();
+}
+
+function goBack() {
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('playerSelectScreen').style.display = 'flex';
+  updateSelectScreen();
+  currentPlayer = null;
+}
+
+function updateSelectScreen() {
+  document.getElementById('p1xpDisplay').textContent = `⚡ ${state.p1.xp} XP`;
+  document.getElementById('p2xpDisplay').textContent = `⚡ ${state.p2.xp} XP`;
+}
+
+function selectWeek(idx) {
+  currentWeek = idx;
+  renderAll();
+}
+
+function toggleDay(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+function markComplete(weekIdx, dayIdx, xpValue) {
+  const key = getDayKey(weekIdx, dayIdx);
+  const ps = getPlayerState();
+  if (ps.completed[key]) return;
+  ps.completed[key] = true;
+  ps.xp += xpValue;
+  saveState();
+
+  const day = WEEKS[weekIdx].days[dayIdx];
+  showXPPopup(xpValue, day, weekIdx, dayIdx);
+  renderAll();
+}
+
+function showXPPopup(xp, day, weekIdx, dayIdx) {
+  const allWeekDone = WEEKS[weekIdx].days.every((_, di) => isCompleted(weekIdx, di));
+  const icon = day.free ? '🎉' : day.type === 'math' ? '📐' : day.type === 'grammar' ? '✍️' : '🤖';
+  const msgs = [
+    "You're on fire! 🔥", "Crushing it!", "XP earned! 💪",
+    "Level up incoming!", "Quest complete!", "Keep going! ⚡"
+  ];
+  const sub = allWeekDone ? `🏆 Week ${weekIdx + 1} Complete! Full Week Bonus!` : msgs[Math.floor(Math.random() * msgs.length)];
+
+  document.getElementById('popupIcon').textContent = icon;
+  document.getElementById('popupTitle').textContent = day.free ? 'FREE DAY DONE!' : 'SESSION COMPLETE!';
+  document.getElementById('popupXP').textContent = `+${xp} XP`;
+  document.getElementById('popupSub').textContent = sub;
+
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('xpPopup').classList.add('show');
+
+  // Star burst
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => spawnStar(), i * 80);
+  }
+}
+
+function spawnStar() {
+  const star = document.createElement('div');
+  star.className = 'star-burst';
+  const icons = ['⭐','✨','💫','🌟','⚡'];
+  star.textContent = icons[Math.floor(Math.random() * icons.length)];
+  const tx = (Math.random() - 0.5) * 300;
+  const ty = (Math.random() - 0.5) * 300;
+  star.style.cssText = `left:50%;top:50%;--tx:${tx}px;--ty:${ty}px;`;
+  document.body.appendChild(star);
+  setTimeout(() => star.remove(), 1000);
+}
+
+function closePopup() {
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('xpPopup').classList.remove('show');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────
+loadState();
+updateSelectScreen();
+</script>
+</body>
+</html>
